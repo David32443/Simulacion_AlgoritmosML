@@ -15,25 +15,28 @@ def simple_topology():
     h2 = net.addHost('h2') #crea un host con el nombre h2
     s1 = net.addSwitch('s1') #crea un switch con el nombre s1
     c0 = net.addController('c0') #crea un controlador con el nombre c0
+    #el controlador es un software que se encarga de gestionar el tráfico de la red y de tomar decisiones sobre cómo se debe enrutar el tráfico
 
     print("Creando enlaces...")
-    net.addLink(h1, s1)
+    net.addLink(h1, s1) #crea un enlace entre el host h1 y el switch s1
     net.addLink(h2, s1)
 
     print("Iniciando la red...")
-    net.start()
-    c0.start()
-    s1.start([c0])
+    net.start() #inicia la red virtual
+    c0.start() #inicia el controlador c0
+    s1.start([c0]) #inicia el switch s1 con el controlador c0 asociado
 
     print("Ejecutando prueba de ping...")
-    net.ping([h1, h2])
+    net.ping([h1, h2]) #ejecuta una prueba de ping entre los hosts h1 y h2
 
     print("Capturando tráfico con tcpdump...")
-    h1.cmd('tcpdump -w h1-traffic.pcap &')
+    h1.cmd('tcpdump -w h1-traffic.pcap &') #captura el tráfico del host h1 y lo guarda en un archivo pcap
     h2.cmd('tcpdump -w h2-traffic.pcap &')
 
+
     print("Generando tráfico de prueba...")
-    h1.cmd('ping -c 10 {}'.format(h2.IP()))
+    h1.cmd('ping -c 10 {}'.format(h2.IP())) #genera tráfico de prueba entre los hosts h1 y h2 con 10 paquetes
+    #h2.ip() devuelve la dirección IP del host h2
 
     print("Deteniendo la red...")
     net.stop()
